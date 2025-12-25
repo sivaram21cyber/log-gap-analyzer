@@ -1,122 +1,88 @@
-**Project:**
-  Name: Log Gap Analyzer Dashboard
-  Description: >
-    A Flask-based security analytics web application that performs
-    log audit and gap analysis using MITRE ATT&CK and STRIDE frameworks.
-    It helps SOC teams understand detection coverage and identify monitoring gaps.
+# 🛡️ Log Gap Analyzer Dashboard
 
-**Author:**
-  name: Sivaram Ganesan
-  domain: Cyber Security / SOC / Detection Engineering
+**A Flask-based security analytics tool for SOC teams to visualize detection coverage, audit logs, and identify gaps using MITRE ATT&CK and STRIDE.**
 
-**Tech_stack:**
-  backend:
-    - Python
-    - Pandas
-    - Flask
-  frontend:
-    - HTML
-    - Jinja2
-  frameworks:
-    - MITRE ATT&CK
-    - STRIDE
+## 📖 Overview
 
-**Project_structure:**
-  src: Core log gap analysis engine (business logic)
-  web: Flask web application (routes and UI)
-  data: Sample input Excel file for testing
-  output: Generated analysis results (optional export)
+Modern SOCs collect massive amounts of logs, but often struggle to answer the simple question: **"What are we actually detecting?"**
 
-**Purpose:**
-  log_audit: >
-    Validate whether collected logs are available, useful,
-    retained properly, and support detection and investigation.
-  mitre_gap_analysis: >
-    Identify logs and detections that are not mapped to
-    MITRE ATT&CK attacker techniques.
-  stride_analysis: >
-    Assess coverage across STRIDE threat model categories
-    such as Spoofing, Tampering, and Elevation of Privilege.
+The **Log Gap Analyzer** solves this by ingesting your log audit data and mapping it against industry frameworks. It helps you move from "we have logs" to "we have coverage."
 
-**Why_this_tool_exists:**
-  problem:
-    - Logs are collected but not evaluated
-    - Alerts exist but attacker behavior is unclear
-    - Organizations cannot explain detection coverage
-  solution:
-    - Visual dashboard showing risk, gaps, and weaknesses
-    - Clear mapping to MITRE and STRIDE
-    - Actionable insights for SOC teams
+### 🚀 Key Capabilities
+- **Risk Visualization:** Instantly see High/Medium/Low risk areas based on detection maturity.
+- **MITRE ATT&CK Mapping:** Identify logs that aren't mapped to specific TTPs.
+- **STRIDE Analysis:** Assess coverage across Spoofing, Tampering, Repudiation, etc.
+- **Retention Auditing:** Flag log sources that don't meet retention policies.
 
-**Dashboard_sections:**
-  Risk_summary
-    description: >
-      Color-coded High / Medium / Low risk summary
-      based on detection status, STRIDE coverage, and retention.
-  Mitre_gaps:
-    description: >
-      Logs that are not mapped to any MITRE ATT&CK techniques.
-      Indicates lack of clarity, not lack of detections.
-  Monitoring_weaknesses:
-    description: >
-      Logs with missing or partial detections
-      or insufficient retention period.
-  Full_analysis:
-    description: >
-      Complete log audit view including availability,
-      collection method, detection utility,
-      STRIDE coverage, MITRE coverage, and risk level.
+### Prerequisites
+- Python 3.9+
+- `pip`
 
-**Mitre_gap_definition:**
-  meaning: >
-    MITRE gap occurs when logs, rules, or alerts exist,
-    but the organization is unsure which attacker TTPs they cover.
-  does_not_mean:
-    - Tools are broken
-    - Logs are useless
-    - Security failure
-  actually_means:
-    - Missing documentation
-    - Missing mapping
-    - Detection maturity gap
+### Installation
 
-**How_to_use:**
-  **Prerequisites:**
-    - Python 3.9 or higher
-    - pip package manager
-  **install_dependencies:**
-    command: pip install -r requirements.txt
-    
-  start_application:
-    command: python web/app.py
-    expected_output: Running on http://127.0.0.1:5000
-  access_ui:
-    url: http://127.0.0.1:5000
-  upload_process:
-    steps:
-      - Open web UI
-      - Upload Excel log audit file
-      - Click "Run Analysis"
-  results_displayed:
-    - Risk summary cards
-    - MITRE ATT&CK gaps table
-    - Monitoring weaknesses table
-    - Full analysis table
-  optional_output:
-    file: output/Log_Gap_Analysis_Result.xlsx
-    usage:
-      - Audit evidence
-      - Offline review
-      - Management reporting
+**Clone the repository**
+   ```bash
+   git clone https://github.com/sivaram21cyber/log-gap-analyzer.git
+   cd log-gap-analyzer
 
-**sample_input:**
-  file_path: data/Log_Gap_Analyzer_Sample_Audit.xlsx
-  purpose: Quick testing and demo
+**Set up a virtual environment:**
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 
-**benefits:**
-  - Improves SOC visibility
-  - Highlights detection blind spots
-  - Supports audits and compliance
-  - Reduces false sense of security
+**Install dependencies**
+pip install -r requirements.txt
 
+**Run the application**
+python web/app.py
 
+**Access the Dashboard **
+Open your browser and navigate to: http://127.0.0.1:5000
+
+**How to Use**
+**1. Prepare Your Data**
+The tool works by analyzing an Excel log audit file. A sample is provided in data/Log_Gap_Analyzer_Sample_Audit.xlsx.
+
+Tip: Keep the column headers from the sample file but populate the rows with your own log sources (e.g., Firewall, EDR, AD Logs).
+**2. Upload & Analyze**
+Go to the web UI.
+Upload your Excel file.
+Click "Run Analysis".
+**3. Interpret Results**
+Risk Summary: Executive-level view of your logging health.
+MITRE Gaps: Shows logs that exist but lack clear TTP mapping (often a documentation issue).
+Monitoring Weaknesses: Highlights logs with missing detections or poor retention.
+Full Analysis: The deep-dive view for auditors and engineers.
+
+🧠 Concepts
+What is a "MITRE Gap"?
+In this tool, a MITRE Gap doesn't necessarily mean you are vulnerable. It means:
+
+"We have logs/alerts here, but we haven't explicitly mapped them to an attacker technique."
+
+This is often a documentation or maturity gap rather than a technology failure.
+
+Why STRIDE?
+While MITRE covers attacks, STRIDE covers threats to the system model. This tool ensures you aren't just looking for hackers (MITRE) but also fundamental security failures (STRIDE), like unlogged administrative access (Elevation of Privilege).
+
+🤝** Contributing**
+We love contributions! Whether it's fixing a bug, adding a new chart, or improving the UI.
+
+Fork the project.
+Create your feature branch (git checkout -b feature/AmazingFeature).
+Commit your changes (git commit -m 'Add some AmazingFeature').
+Push to the branch (git push origin feature/AmazingFeature).
+Open a Pull Request.
+📂 **Project Structure:**
+├── data/          # Sample input files for testing
+├── output/        # Generated analysis reports (Excel exports)
+├── src/           # Core analysis logic (Pandas/Python)
+├── web/           # Flask application (Routes & UI)
+│   ├── static/    # CSS/JS assets
+│   └── templates/ # HTML templates
+├── requirements.txt
+└── README.md
+
+👤** Author**
+Sivaram Ganesan
+Domain: Cyber Security / SOC / Detection Engineering
+GitHub: @sivaram21cyber

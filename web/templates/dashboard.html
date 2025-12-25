@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log Gap Analyzer Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            padding: 20px;
+        }
+
+        h2 { margin-top: 30px; }
+
+        .card {
+            display: inline-block;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            color: white;
+            width: 200px;
+            text-align: center;
+        }
+
+        .high { background: #e74c3c; }
+        .medium { background: #f39c12; }
+        .low { background: #2ecc71; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📊 Log Gap Analyzer Dashboard</h1>
+
+<!-- ================= RISK SUMMARY ================= -->
+<h2>📊 Risk Summary</h2>
+
+{% set high = risk_summary | selectattr("Risk Level", "equalto", "High") | list | length %}
+{% set medium = risk_summary | selectattr("Risk Level", "equalto", "Medium") | list | length %}
+{% set low = risk_summary | selectattr("Risk Level", "equalto", "Low") | list | length %}
+
+<div class="card high">High Risk<br><b>{{ high }}</b></div>
+<div class="card medium">Medium Risk<br><b>{{ medium }}</b></div>
+<div class="card low">Low Risk<br><b>{{ low }}</b></div>
+
+<!-- ================= MITRE GAPS ================= -->
+<h2>🔴 MITRE Gaps</h2>
+<table>
+<tr><th>Log Name</th><th>Reason</th></tr>
+{% for row in mitre_gaps %}
+<tr>
+    <td>{{ row["Log Name"] }}</td>
+    <td>{{ row["Reason"] }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- ================= MONITORING WEAKNESSES ================= -->
+<h2>⚠️ Monitoring Weaknesses</h2>
+<table>
+<tr>
+    <th>Log Name</th>
+    <th>Detections Active</th>
+    <th>Retention</th>
+    <th>MITRE Coverage</th>
+</tr>
+{% for row in weaknesses %}
+<tr>
+    <td>{{ row["Log Name"] }}</td>
+    <td>{{ row["Detections Active?"] }}</td>
+    <td>{{ row["Retention Period"] }}</td>
+    <td>{{ row["MITRE Coverage"] }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- ================= FULL ANALYSIS ================= -->
+<h2>📋 Full Analysis</h2>
+
+{% if full_analysis %}
+<table>
+<tr>
+{% for key in full_analysis[0].keys() %}
+    <th>{{ key }}</th>
+{% endfor %}
+</tr>
+
+{% for row in full_analysis %}
+<tr>
+{% for value in row.values() %}
+    <td>{{ value }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No data available</p>
+{% endif %}
+
+</body>
+</html>
